@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pour Chahrora ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+```
+<style>
+    :root {
+        --orange: #FF8C42;
+        --rose: #FF4D6D;
+        --bleu: #1DA1F2;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        background: #1a1a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* Fond dégradé animé si pas de photo */
+    .bg-image {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: 
+            url('ta_photo.jpg') no-repeat center center,
+            linear-gradient(135deg, #2c0a15, #1a0a2e, #0a1a2e);
+        background-size: cover;
+        z-index: 0;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, 
+            rgba(255, 140, 66, 0.35), 
+            rgba(255, 77, 109, 0.35), 
+            rgba(29, 161, 242, 0.35));
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 1;
+    }
+
+    .container {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 40px 24px;
+        border-radius: 30px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+        font-family: 'Great Vibes', cursive;
+        font-size: 38px;
+        color: white;
+        margin-bottom: 36px;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .btn-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 18px;
+        min-height: 70px;
+        position: relative;
+    }
+
+    button {
+        padding: 14px 0;
+        width: 130px;
+        border: none;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: none;
+    }
+
+    .yes {
+        background: linear-gradient(45deg, var(--orange), var(--rose));
+        color: white;
+        z-index: 11;
+    }
+
+    .yes:active {
+        transform: scale(0.95);
+    }
+
+    .no {
+        background: var(--bleu);
+        color: white;
+        z-index: 12;
+    }
+
+    /* Message affiché après "Oui" */
+    .message-box {
+        display: none;
+        color: white;
+        font-size: 16px;
+        line-height: 1.8;
+        animation: fadeIn 0.9s ease;
+    }
+
+    .message-box strong {
+        color: var(--orange);
+        font-size: 24px;
+        display: block;
+        margin-bottom: 12px;
+        font-family: 'Great Vibes', cursive;
+        font-weight: 400;
+    }
+
+    /* Emojis flottants */
+    .emoji {
+        position: fixed;
+        pointer-events: none;
+        z-index: 5;
+        animation: floatUp linear forwards;
+    }
+
+    @keyframes floatUp {
+        0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+        10%  { opacity: 1; }
+        100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+</style>
+```
+
+</head>
+<body>
+
+<div class="bg-image"></div>
+<div class="overlay"></div>
+
+<div class="container">
+    <div id="quiz">
+        <h1>Tu m'aimes vraiment ?</h1>
+        <div class="btn-wrapper" id="btnWrapper">
+            <button class="yes" id="yesBtn">Oui 💖</button>
+            <button class="no"  id="noBtn">Non 💙</button>
+        </div>
+    </div>
+
+```
+<div class="message-box" id="message">
+    <strong>Chahrora...</strong>
+    je suis vraiment désolé de t'avoir blessée et de t'avoir fait de la peine.<br><br>
+    Serait-il possible de passer à autre chose et de finir ma vie à tes côtés ?<br><br>
+    ✨ <span style="color:var(--rose)">Pour le meilleur et pour le pire.</span> ✨
+</div>
+```
+
+</div>
+
+<script>
+    const noBtn    = document.getElementById("noBtn");
+    const yesBtn   = document.getElementById("yesBtn");
+    const emojis   = ["❤️","💖","🧡","🌸","🌼","🌻","💙","🥰","😍"];
+    let isFixed    = false;
+
+    /* ── Déplacement du bouton "Non" ── */
+    function moveNoBtn(e) {
+        if (e) e.preventDefault();
+
+        // Première fois : on détache du flux
+        if (!isFixed) {
+            const rect = noBtn.getBoundingClientRect();
+            noBtn.style.position = "fixed";
+            noBtn.style.left     = rect.left + "px";
+            noBtn.style.top      = rect.top  + "px";
+            noBtn.style.margin   = "0";
+            isFixed = true;
+        }
+
+        const pad  = 20;
+        const maxX = window.innerWidth  - noBtn.offsetWidth  - pad;
+        const maxY = window.innerHeight - noBtn.offsetHeight - pad;
+
+        noBtn.style.transition = "left 0.15s ease, top 0.15s ease";
+        noBtn.style.left = (Math.random() * (maxX - pad) + pad) + "px";
+        noBtn.style.top  = (Math.random() * (maxY - pad) + pad) + "px";
+    }
+
+    // Souris
+    noBtn.addEventListener("mouseover",   moveNoBtn, { passive: false });
+    // Tactile (iPhone / Android) — touchstart est beaucoup plus réactif que touchmove
+    noBtn.addEventListener("touchstart",  moveNoBtn, { passive: false });
+    noBtn.addEventListener("touchmove",   moveNoBtn, { passive: false });
+    // Clic sur "Non" → déplace aussi (au cas où quelqu'un clique vite)
+    noBtn.addEventListener("click",       moveNoBtn);
+
+    /* ── Pluie d'emojis ── */
+    function createEmoji() {
+        const el       = document.createElement("div");
+        el.className   = "emoji";
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left  = Math.random() * 100 + "vw";
+        el.style.fontSize = (Math.random() * 20 + 18) + "px";
+        const dur      = Math.random() * 3 + 4;
+        el.style.animationDuration = dur + "s";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000);
+    }
+
+    setInterval(createEmoji, 400);
+
+    /* ── Affichage du message d'amour ── */
+    yesBtn.addEventListener("click", showLove);
+
+    function showLove() {
+        document.getElementById("quiz").style.display    = "none";
+        document.getElementById("message").style.display = "block";
+        noBtn.style.display = "none";
+
+        // Grosse pluie finale 🎉
+        for (let i = 0; i < 60; i++) {
+            setTimeout(createEmoji, i * 35);
+        }
+    }
+</script>
+
+</body>
+</html>
